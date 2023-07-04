@@ -54,7 +54,7 @@ jobs:
           registry: ghcr.io
           # will run as the user who triggered the action, using its token
           username: reutenauer
-          password: {{ secrets.SEEK_TOKEN }}
+          password: ${{ secrets.SEEK_TOKEN }}
       - name: Docker Meta
         id: meta
         uses: docker/metadata-action@v4
