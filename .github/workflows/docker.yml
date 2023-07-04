@@ -10,6 +10,7 @@ on:
   push:
     branches:
       - digital-research-hub
+      - arthur/automatic-deployment
   # generate images for releases, using the tag name
   # the newest one will be latest as well
   release:
