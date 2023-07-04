@@ -54,7 +54,7 @@ jobs:
           registry: ghcr.io
           # will run as the user who triggered the action, using its token
           username: reutenauer
-          password: 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
+          password: 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
       - name: Docker Meta
         id: meta
         uses: docker/metadata-action@v4
