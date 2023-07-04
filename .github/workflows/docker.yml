@@ -30,7 +30,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - dockerfile: Dockerfiles/Dockerfile.backend
+          - dockerfile: Dockerfile
             images: |
               # docker.io/scilifelabdatacentre/repo-name-backend
               ghcr.io/scilifelabdatacentre/seek
