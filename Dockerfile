@@ -76,6 +76,10 @@ RUN curl -fsSLO "$SUPERCRONIC_URL" \
 # Cleanup and remove default nginx index page
 RUN rm -rf /tmp/* /var/tmp/* /usr/share/nginx/html/index.html
 
+# Adding a user directly
+RUN echo 'seek-user:x:1000:1000:,,,:/home/s:/bin/bash' >>/etc/passwd
+RUN echo 'seek-user:$y$j9T$WvUczvUD4jaiAhEdlNpo/.$tfjvhSmdwNCfPWO4yjm.ORfqAZ3L0Tk0b6wHbtS7udC:19611:0:99999:7:::' >>/etc/shadow
+
 USER www-data
 
 # Network
