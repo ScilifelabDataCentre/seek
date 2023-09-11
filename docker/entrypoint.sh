@@ -6,6 +6,9 @@
 # DB config
 check_mysql
 
+# AR 2023-09-11.  TODO Delete later!
+./docker/upgrade.sh
+
 # Search
 start_search
 
