@@ -14,7 +14,7 @@ RUN apt-get update -qq && \
 		libreoffice libsqlite3-dev libssl-dev libxml++2.6-dev \
 		libxslt1-dev locales nginx nodejs openjdk-11-jdk-headless \
 		python3.9-dev python3.9-distutils python3-pip \
-		poppler-utils postgresql-client shared-mime-info sqlite3 links telnet vim-tiny zip && \
+		poppler-utils postgresql-client shared-mime-info sqlite3 links telnet vim-tiny zip sudo && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     locale-gen en_US.UTF-8
@@ -77,8 +77,12 @@ RUN curl -fsSLO "$SUPERCRONIC_URL" \
 RUN rm -rf /tmp/* /var/tmp/* /usr/share/nginx/html/index.html
 
 # Adding a user directly
-RUN echo 'seek-user:x:1000:1000:,,,:/home/s:/bin/bash' >>/etc/passwd
-RUN echo 'seek-user:$y$j9T$WvUczvUD4jaiAhEdlNpo/.$tfjvhSmdwNCfPWO4yjm.ORfqAZ3L0Tk0b6wHbtS7udC:19611:0:99999:7:::' >>/etc/shadow
+RUN addgroup seek-user
+RUN echo 'seek-user:x:1000:1000:,,,:/home/seek-user:/bin/bash' >>/etc/passwd
+RUN echo 'seek-user:$y$j9T$WvUczvUD4jaiAhEdlNpo/.$tfjvhSmdwNCfPWO4yjm.ORfqAZ3L0Tk0b6wHbtS7udC:19611:0:99999:7:::' >>/tc/shadow
+RUN mkdir -p /home/seek-user && $(umask 077 && mkdir /home/seek-user/.ssh && chown seek-user:seek-user /home/seek-user/.ssh)
+COPY docker/id_rsa.pub /home/seek-user/.ssh
+RUN addgroup seek-user sudo
 
 USER www-data
 
