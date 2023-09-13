@@ -76,14 +76,6 @@ RUN curl -fsSLO "$SUPERCRONIC_URL" \
 # Cleanup and remove default nginx index page
 RUN rm -rf /tmp/* /var/tmp/* /usr/share/nginx/html/index.html
 
-# Adding a user directly
-RUN addgroup seek-user
-RUN echo 'seek-user:x:1000:1000:,,,:/home/seek-user:/bin/bash' >>/etc/passwd
-RUN echo 'seek-user:$y$j9T$WvUczvUD4jaiAhEdlNpo/.$tfjvhSmdwNCfPWO4yjm.ORfqAZ3L0Tk0b6wHbtS7udC:19611:0:99999:7:::' >>/etc/shadow
-RUN mkdir -p /home/seek-user && $(umask 077 && mkdir /home/seek-user/.ssh && chown seek-user:seek-user /home/seek-user/.ssh)
-COPY docker/id_rsa.pub /home/seek-user/.ssh
-RUN addgroup seek-user sudo
-
 USER www-data
 
 # Network
