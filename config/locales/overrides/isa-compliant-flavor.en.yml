@@ -1,0 +1,14 @@
+en:
+  programme: &programme Unit
+  programme_administrator: Unit Administrator
+  sop: &sop Protocol
+  attributes:
+    programme: *programme
+    programmes: Units
+    sop: *sop
+    sops: Protocols
+  activerecord:
+    programme: *programme
+    sop: *sop
+  info_text:
+    programme: "A Unit refers to either a research group or an infrastructure unit and is used to group projects."
