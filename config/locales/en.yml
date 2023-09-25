@@ -74,8 +74,7 @@ en:
   menu:
     yellow_pages: "Directory"
     isa:  "Experiments"
-    main: "Core Resources"
-    assets: "Other Resources"
+    assets: "Assets"
     activities: "Activities"
     samples: "Samples"
     documentation: "Help"
