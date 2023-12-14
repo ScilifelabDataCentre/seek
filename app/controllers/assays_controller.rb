@@ -6,6 +6,7 @@ class AssaysController < ApplicationController
   before_action :assays_enabled?
   before_action :find_assets, :only=>[:index]
   before_action :find_and_authorize_requested_item, :only=>[:edit, :update, :destroy, :manage, :manage_update, :show, :new_object_based_on_existing_one]
+  before_action :delete_linked_sample_types, only: [:destroy]
 
   #project_membership_required_appended is an alias to project_membership_required, but is necessary to include the actions
   #defined in the application controller
@@ -18,7 +19,7 @@ class AssaysController < ApplicationController
   api_actions :index, :show, :create, :update, :destroy
 
   def new_object_based_on_existing_one
-    @existing_assay =  Assay.find(params[:id])
+    @existing_assay = Assay.find(params[:id])
     @assay = @existing_assay.clone_with_associations
 
     if @existing_assay.can_view?
@@ -62,9 +63,7 @@ class AssaysController < ApplicationController
       flash[:error]="You do not have the necessary permissions to copy this #{t('assays.assay')}"
       redirect_to @existing_assay
     end
-
-
-   end
+  end
 
   def new
     @assay=setup_new_asset
@@ -110,6 +109,14 @@ class AssaysController < ApplicationController
         format.json { render json: json_api_errors(@assay), status: :unprocessable_entity }
       end
     end
+  end
+
+
+  def delete_linked_sample_types
+    return unless is_single_page_assay?
+    return if @assay.sample_type.nil?
+
+    @assay.sample_type.destroy
   end
 
   def update
@@ -169,12 +176,18 @@ class AssaysController < ApplicationController
                                   { data_files_attributes: [:asset_id, :direction, :relationship_type_id] },
                                   { placeholders_attributes: [:asset_id, :direction, :relationship_type_id] },
                                   { publication_ids: [] },
-                                  { custom_metadata_attributes: determine_custom_metadata_keys },
+                                  { extended_metadata_attributes: determine_extended_metadata_keys },
           { discussion_links_attributes:[:id, :url, :label, :_destroy] }
                                   ).tap do |assay_params|
       assay_params[:document_ids].select! { |id| Document.find_by_id(id).try(:can_view?) } if assay_params.key?(:document_ids)
       assay_params[:sop_ids].select! { |id| Sop.find_by_id(id).try(:can_view?) } if assay_params.key?(:sop_ids)
       assay_params[:model_ids].select! { |id| Model.find_by_id(id).try(:can_view?) } if assay_params.key?(:model_ids)
     end
+  end
+
+  def is_single_page_assay?
+    return false unless params.key?(:return_to)
+
+    params[:return_to].start_with? '/single_pages/'
   end
 end
