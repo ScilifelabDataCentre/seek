@@ -23,11 +23,10 @@ SEEK::Application.configure do
   Seek::Config.filtering_enabled = true
   Seek::Config.programme_user_creation_enabled = true
   Seek::Config.project_single_page_enabled = true
-  Seek::Config.project_single_page_advanced_enabled = true
+  Seek::Config.isa_json_compliance_enabled = true
 
   # Enabled/Disabled resource types
   Seek::Config.programmes_enabled = true
-  Seek::Config.sample_type_template_enabled = true
 
   # Enabled/Disabled integrations
   Seek::Config.jws_enabled = false
