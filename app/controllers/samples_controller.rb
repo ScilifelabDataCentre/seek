@@ -40,10 +40,11 @@ class SamplesController < ApplicationController
 
   def new
     if params[:sample_type_id]
-      @sample = Sample.new(sample_type_id: params[:sample_type_id])
+      @sample = Sample.new(sample_type_id: params[:sample_type_id], project_ids: params[:project_ids])
       respond_with(@sample)
     else
-      redirect_to select_sample_types_path(act: :create)
+      project_ids_param = params[:sample] ? params[:sample][:project_ids] : {}
+      redirect_to select_sample_types_path(act: :create, project_ids: project_ids_param)
     end
   end
 
@@ -328,7 +329,7 @@ class SamplesController < ApplicationController
   end
 
   def templates_enabled?
-    unless Seek::Config.sample_type_template_enabled
+    unless Seek::Config.isa_json_compliance_enabled
       flash[:error] = 'Not available'
       redirect_to select_sample_types_path
     end

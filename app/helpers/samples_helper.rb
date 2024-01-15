@@ -6,7 +6,7 @@ module SamplesHelper
     attribute_form_element(attribute, resource.get_attribute_value(attribute.title), element_name, element_class)
   end
 
-  def controlled_vocab_form_field(sample_controlled_vocab, element_name, values, limit = 1)
+  def controlled_vocab_form_field(sample_controlled_vocab, element_name, values, allow_new, limit = 1)
 
     scv_id = sample_controlled_vocab.id
     object_struct = Struct.new(:id, :title)
@@ -32,13 +32,13 @@ module SamplesHelper
     objects_input(element_name, existing_objects,
                   typeahead: typeahead,
                   limit: limit,
-                  allow_new: sample_controlled_vocab.custom_input?,
+                  allow_new: allow_new,
                   class: 'form-control')
 
   end
 
-  def controlled_vocab_list_form_field(sample_controlled_vocab, element_name, values)
-    controlled_vocab_form_field(sample_controlled_vocab, element_name, values, nil)
+  def controlled_vocab_list_form_field(sample_controlled_vocab, element_name, values, allow_new)
+    controlled_vocab_form_field(sample_controlled_vocab, element_name, values, allow_new, nil)
   end
 
   def linked_extended_metadata_multi_form_field(attribute, value, element_name, element_class)
@@ -152,6 +152,22 @@ module SamplesHelper
     end
   end
 
+  def select_cv_source_ontology(sample_controlled_vocab)
+    ontology_choices = Ebi::OlsClient.ontology_choices
+    local_options = ontology_choices.collect do |choice|
+      { id: choice[1], text: choice[0]}
+    end
+    existing = []
+    if sample_controlled_vocab.source_ontology
+      label = ontology_choices.select{|choice| choice[1] == sample_controlled_vocab.source_ontology}.first.try(:[],0)
+      existing = [OpenStruct.new({id: sample_controlled_vocab.source_ontology, title: label })]
+    end
+    placeholder = 'Select or Search, or leave blank for No Ontology'
+    objects_input 'sample_controlled_vocab[source_ontology]', existing, {typeahead: {values:local_options},
+                                                                         placeholder: placeholder,
+                                                                         multiple: false}
+  end
+
   def seek_cv_attribute_display(value, attribute)
     term = attribute.sample_controlled_vocab.sample_controlled_vocab_terms.where(label:value).last
     content = value
@@ -243,7 +259,7 @@ module SamplesHelper
 
   # link for the sample type for the provided sample. Handles a referring_sample_id if required
   def sample_type_link(sample, user=User.current_user)
-    return nil if Seek::Config.project_single_page_advanced_enabled && !sample.sample_type.template_id.nil?
+    return nil if Seek::Config.isa_json_compliance_enabled && !sample.sample_type.template_id.nil?
 
     if (sample.sample_type.can_view?(user))
       link_to sample.sample_type.title,sample.sample_type
@@ -263,12 +279,12 @@ module SamplesHelper
   end
 
   def ols_ontology_link(ols_id)
-    link = "https://www.ebi.ac.uk/ols/ontologies/#{ols_id}"
+    link = "#{Ebi::OlsClient::ROOT_URL}/ontologies/#{ols_id}"
     link_to(link,link,target: :_blank)
   end
 
   def ols_root_term_link(ols_id, term_uri)
-    ols_link = "https://www.ebi.ac.uk/ols/ontologies/#{ols_id}/terms?iri=#{term_uri}"
+    ols_link = "#{Ebi::OlsClient::ROOT_URL}/ontologies/#{ols_id}/terms?iri=#{term_uri}"
     link_to(term_uri, ols_link, target: :_blank)
   end
 
@@ -285,13 +301,17 @@ module SamplesHelper
     }
   end
 
-  def show_extract_samples_button?(asset, display_asset)
-    return false unless ( asset.can_manage? && (display_asset.version == asset.version) && asset.sample_template? && asset.extracted_samples.empty? )
-    return ! ( asset.sample_extraction_task&.in_progress? || ( asset.sample_extraction_task&.success? && Seek::Samples::Extractor.new(asset).fetch.present? ) )
+  # whether to attempt to show the extract samples button,
+  # the final check of whether there is a sample type will be done asynchronously
+  def attempt_to_show_extract_samples_button?(asset, display_asset)
+    return false unless SampleType.any? && asset.can_manage? && asset.content_blob&.is_extractable_spreadsheet?
+    return false unless asset.extracted_samples.empty? && (display_asset.version == asset.version)
+    return false if asset.sample_extraction_task&.in_progress?
 
-    rescue Seek::Samples::FetchException
-      return true # allows to try again
+    !(asset.sample_extraction_task&.success? && Seek::Samples::Extractor.new(asset).fetch.present?)
 
+  rescue Seek::Samples::FetchException
+    true #allows to try again, the previous cached results may be broken
   end
 
   def show_sample_extraction_status?(data_file)
@@ -340,9 +360,9 @@ module SamplesHelper
                                                    :title, value.try(:[], 'id'))
       select_tag(element_name, options, include_blank: !attribute.required?, class: "form-control #{element_class}")
     when Seek::Samples::BaseType::CV
-      controlled_vocab_form_field attribute.sample_controlled_vocab, element_name, value
+      controlled_vocab_form_field attribute.sample_controlled_vocab, element_name, value, attribute.allow_cv_free_text?
     when Seek::Samples::BaseType::CV_LIST
-      controlled_vocab_list_form_field attribute.sample_controlled_vocab, element_name, value
+      controlled_vocab_list_form_field attribute.sample_controlled_vocab, element_name, value, attribute.allow_cv_free_text?
     when Seek::Samples::BaseType::SEEK_SAMPLE
       sample_form_field attribute, element_name, value
     when Seek::Samples::BaseType::SEEK_SAMPLE_MULTI
