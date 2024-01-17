@@ -141,8 +141,8 @@ class ConfigTest < ActiveSupport::TestCase
   test 'noreply_sender' do
     assert_equal 'no-reply@sysmo-db.org', Seek::Config.noreply_sender
   end
-  test 'jws enabled' do
-    assert Seek::Config.jws_enabled
+  test 'jws disabled' do
+    assert !Seek::Config.jws_enabled
   end
 
   test 'exception_notification_enabled' do
@@ -200,19 +200,19 @@ class ConfigTest < ActiveSupport::TestCase
 
   # Project
   test 'project_name' do
-    assert_equal 'Sysmo SEEK', Seek::Config.instance_name
+    assert_equal 'SciLifeLab Digital Research Hub', Seek::Config.instance_name
   end
 
   test 'instance_link' do
-    assert_equal 'http://www.sysmo.net', Seek::Config.instance_link
+    assert_equal 'https://www.scilifelab.se/data/', Seek::Config.instance_link
   end
 
   test 'instance_admins_name' do
-    assert_equal 'SysMO-DB', Seek::Config.instance_admins_name
+    assert_equal 'SciLifeLab Data Centre', Seek::Config.instance_admins_name
   end
 
   test 'instance_admins_link' do
-    assert_equal 'http://www.sysmo-db.org', Seek::Config.instance_admins_link
+    assert_equal 'https://www.scilifelab.se/data/', Seek::Config.instance_admins_link
   end
   test 'application_name' do
     assert_equal 'FAIRDOM-SEEK', Seek::Config.application_name
@@ -225,7 +225,7 @@ class ConfigTest < ActiveSupport::TestCase
     assert_equal 'http://www.sysmo-db.org', Seek::Config.header_image_link
   end
   test 'header_image_title' do
-    assert_equal 'SysMO-DB', Seek::Config.header_image_title
+    assert_equal 'The SciLifeLab Digital Research Hub logo', Seek::Config.header_image_title
   end
 
   test 'change default sorting' do
@@ -388,7 +388,7 @@ class ConfigTest < ActiveSupport::TestCase
   end
 
   test 'home_description' do
-    assert_equal 'You can configure the text that goes here within the Admin pages: Site Configuration->Home page settings.', Seek::Config.home_description
+    assert_equal '<h3>Welcome to SciLifeLab Digital Research Hub</h3> <strong>CURRENTLY THIS SITE IS FOR TESTING PURPOSES ONLY.</strong><br><strong>INFORMATION STORED IN THIS SITE WILL BE DELETED FREQUENTLY AND WITHOUT WARNING.</strong>', Seek::Config.home_description
     Seek::Config.home_description = 'A new description'
     assert_equal 'A new description', Seek::Config.home_description
   end
