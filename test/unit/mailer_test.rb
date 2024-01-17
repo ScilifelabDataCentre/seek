@@ -8,7 +8,7 @@ class MailerTest < ActionMailer::TestCase
   end
 
   test 'activation_request' do
-    @expected.subject = 'Sysmo SEEK account activation'
+    @expected.subject = 'SciLifeLab Digital Research Hub account activation'
     @expected.to = 'Aaron Spiggle <aaron@email.com>'
     @expected.from    = 'no-reply@sysmo-db.org'
 
@@ -21,7 +21,7 @@ class MailerTest < ActionMailer::TestCase
     announcement = FactoryBot.create(:mail_announcement)
     recipient = FactoryBot.create(:person)
 
-    @expected.subject = "Sysmo SEEK Announcement: #{announcement.title}"
+    @expected.subject = "SciLifeLab Digital Research Hub Announcement: #{announcement.title}"
     @expected.to = recipient.email_with_name
     @expected.from    = 'no-reply@sysmo-db.org'
 
@@ -33,7 +33,7 @@ class MailerTest < ActionMailer::TestCase
   end
 
   test 'feedback anonymously' do
-    @expected.subject = 'Sysmo SEEK Feedback provided - This is a test feedback'
+    @expected.subject = 'SciLifeLab Digital Research Hub Feedback provided - This is a test feedback'
     @expected.to = 'Quentin Jones <quentin@email.com>'
     @expected.from    = 'no-reply@sysmo-db.org'
 
@@ -43,7 +43,7 @@ class MailerTest < ActionMailer::TestCase
   end
 
   test 'feedback non anonymously' do
-    @expected.subject = 'Sysmo SEEK Feedback provided - This is a test feedback'
+    @expected.subject = 'SciLifeLab Digital Research Hub Feedback provided - This is a test feedback'
     @expected.to = 'Quentin Jones <quentin@email.com>'
     @expected.from = 'no-reply@sysmo-db.org'
     @expected.reply_to = 'Aaron Spiggle <aaron@email.com>'
@@ -62,7 +62,7 @@ class MailerTest < ActionMailer::TestCase
     @owner = FactoryBot.create(:max_person)
     details = 'here are some more details.'
     presentation = FactoryBot.create :ppt_presentation, contributor: @owner
-    @expected.subject = 'A Sysmo SEEK member requests to discuss with you regarding '+ presentation.title
+    @expected.subject = 'A SciLifeLab Digital Research Hub member requests to discuss with you regarding '+ presentation.title
 
     requester = FactoryBot.create(:person, first_name: 'Aaron', last_name: 'Spiggle')
     @expected.reply_to = requester.person.email_with_name
@@ -80,7 +80,7 @@ class MailerTest < ActionMailer::TestCase
     resources = [FactoryBot.create(:data_file, projects: gatekeeper.projects, title: 'Picture', contributor:person), FactoryBot.create(:teusink_model, projects: gatekeeper.projects, title: 'Teusink', contributor:person)]
     requester = FactoryBot.create(:person, first_name: 'Aaron', last_name: 'Spiggle')
 
-    @expected.subject = 'A Sysmo SEEK member requested your approval to publish some items.'
+    @expected.subject = 'A SciLifeLab Digital Research Hub member requested your approval to publish some items.'
 
     @expected.to = gatekeeper.email_with_name
     @expected.from = 'no-reply@sysmo-db.org'
@@ -98,7 +98,7 @@ class MailerTest < ActionMailer::TestCase
   end
 
   test 'request publishing' do
-    @expected.subject = 'A Sysmo SEEK member requests you make some items public'
+    @expected.subject = 'A SciLifeLab Digital Research Hub member requests you make some items public'
     @expected.to = 'Datafile Owner <data_file_owner@email.com>'
     @expected.from = 'no-reply@sysmo-db.org'
     @expected.reply_to = 'Aaron Spiggle <aaron@email.com>'
@@ -122,7 +122,7 @@ class MailerTest < ActionMailer::TestCase
     resources = [FactoryBot.create(:data_file, projects: gatekeeper.projects, title: 'Picture', contributor:person), FactoryBot.create(:teusink_model, projects: gatekeeper.projects, title: 'Teusink', contributor:person)]
     requester = FactoryBot.create(:person, first_name: 'Aaron', last_name: 'Spiggle')
 
-    @expected.subject = 'A Sysmo SEEK member cancelled a publishing approval request.'
+    @expected.subject = 'A SciLifeLab Digital Research Hub member cancelled a publishing approval request.'
     @expected.to = gatekeeper.email_with_name
     @expected.from = 'no-reply@sysmo-db.org'
     @expected.reply_to = requester.person.email_with_name
@@ -144,7 +144,7 @@ class MailerTest < ActionMailer::TestCase
     item = FactoryBot.create(:data_file, projects: gatekeeper.projects, title: 'Picture', contributor:person)
     items_and_comments = [{ item: item, comment: nil }]
     requester = FactoryBot.create(:person, first_name: 'Aaron', last_name: 'Spiggle')
-    @expected.subject = "A Sysmo SEEK #{I18n.t('asset_gatekeeper').downcase} approved your publishing requests."
+    @expected.subject = "A SciLifeLab Digital Research Hub #{I18n.t('asset_gatekeeper').downcase} approved your publishing requests."
 
     @expected.to = requester.email_with_name
     @expected.from = 'no-reply@sysmo-db.org'
@@ -166,7 +166,7 @@ class MailerTest < ActionMailer::TestCase
     items_and_comments = [{ item: item, comment: 'not ready' }]
 
     requester = FactoryBot.create(:person, first_name: 'Aaron', last_name: 'Spiggle')
-    @expected.subject = "A Sysmo SEEK #{I18n.t('asset_gatekeeper').downcase} rejected your publishing requests."
+    @expected.subject = "A SciLifeLab Digital Research Hub #{I18n.t('asset_gatekeeper').downcase} rejected your publishing requests."
 
     @expected.to = requester.email_with_name
     @expected.from = 'no-reply@sysmo-db.org'
@@ -183,7 +183,7 @@ class MailerTest < ActionMailer::TestCase
   end
 
   test 'forgot_password' do
-    @expected.subject = 'Sysmo SEEK - Password reset'
+    @expected.subject = 'SciLifeLab Digital Research Hub - Password reset'
     @expected.to = 'Aaron Spiggle <aaron@email.com>'
     @expected.from    = 'no-reply@sysmo-db.org'
 
@@ -200,7 +200,7 @@ class MailerTest < ActionMailer::TestCase
 
     new_registree = FactoryBot.create(:person,first_name:'Fred',last_name:'Jones', email:'fredjones@email.com')
 
-    @expected.subject = 'Sysmo SEEK member signed up'
+    @expected.subject = 'SciLifeLab Digital Research Hub member signed up'
     @expected.to = 'Quentin Jones <quentin@email.com>'
     @expected.from = 'no-reply@sysmo-db.org'
     @expected.reply_to = 'Fred Jones <fredjones@email.com>'
@@ -216,7 +216,7 @@ class MailerTest < ActionMailer::TestCase
 
 
   test 'welcome' do
-    @expected.subject = 'Welcome to Sysmo SEEK'
+    @expected.subject = 'Welcome to SciLifeLab Digital Research Hub'
     @expected.to = 'Quentin Jones <quentin@email.com>'
     @expected.from = 'no-reply@sysmo-db.org'
 
@@ -235,7 +235,7 @@ class MailerTest < ActionMailer::TestCase
     project_admin = FactoryBot.create(:project_administrator)
     project = project_admin.projects.first
 
-    @expected.subject = "The Sysmo SEEK Project #{project.title} information has been changed"
+    @expected.subject = "The SciLifeLab Digital Research Hub Project #{project.title} information has been changed"
     @expected.to = "Quentin Jones <quentin@email.com>, #{project_admin.email_with_name}"
     @expected.from = 'no-reply@sysmo-db.org'
     @expected.body = read_fixture('project_changed')
@@ -249,7 +249,7 @@ class MailerTest < ActionMailer::TestCase
   test 'programme activation required' do
     creator = FactoryBot.create(:programme_administrator)
     programme = creator.programmes.first
-    @expected.subject = "The Sysmo SEEK Programme #{programme.title} was created and needs activating"
+    @expected.subject = "The SciLifeLab Digital Research Hub Programme #{programme.title} was created and needs activating"
     @expected.to = 'Quentin Jones <quentin@email.com>'
     @expected.from = 'no-reply@sysmo-db.org'
     @expected.body = read_fixture('programme_activation_required')
@@ -266,7 +266,7 @@ class MailerTest < ActionMailer::TestCase
     creator = FactoryBot.create(:programme_administrator)
     programme = creator.programmes.first
 
-    @expected.subject = "The Sysmo SEEK Programme #{programme.title} has been activated"
+    @expected.subject = "The SciLifeLab Digital Research Hub Programme #{programme.title} has been activated"
     @expected.to = creator.email_with_name
     @expected.from = 'no-reply@sysmo-db.org'
     @expected.body = read_fixture('programme_activated')
@@ -282,7 +282,7 @@ class MailerTest < ActionMailer::TestCase
     creator = FactoryBot.create(:programme_administrator)
     programme = creator.programmes.first
 
-    @expected.subject = "The Sysmo SEEK Programme #{programme.title} has been rejected"
+    @expected.subject = "The SciLifeLab Digital Research Hub Programme #{programme.title} has been rejected"
     @expected.to = creator.email_with_name
     @expected.from = 'no-reply@sysmo-db.org'
     @expected.body = read_fixture('programme_rejected')
