@@ -19,7 +19,7 @@ class SchemaLdGenerationTest < ActiveSupport::TestCase
       '@type' => 'DataCatalog',
       '@id' => 'http://fairyhub.org',
       'dct:conformsTo' => 'https://bioschemas.org/profiles/DataCatalog/0.3-RELEASE-2019_07_01/',
-      'name' => 'Sysmo SEEK',
+      'name' => 'SciLifeLab Digital Research Hub',
       'url' => 'http://fairyhub.org',
       'dataset' => [
         { '@type' => 'Dataset', '@id' => 'http://fairyhub.org/collections', 'name' => 'Collections' },
@@ -40,9 +40,9 @@ class SchemaLdGenerationTest < ActiveSupport::TestCase
       'keywords' => 'a, b, c, d',
       'provider' => {
         '@type' => 'Organization',
-        'name' => 'SysMO-DB',
-        'url' => 'http://www.sysmo-db.org',
-        '@id' => 'http://www.sysmo-db.org'
+        'name' => 'SciLifeLab Data Centre',
+        'url' => 'https://www.scilifelab.se/data/',
+        '@id' => 'https://www.scilifelab.se/data/'
       },
       'dateCreated' => @current_time.iso8601,
       'dateModified' => @current_time.iso8601
@@ -69,7 +69,7 @@ class SchemaLdGenerationTest < ActiveSupport::TestCase
       '@type' => 'DataCatalog',
       '@id' => 'http://fairyhub.org',
       'dct:conformsTo' => 'https://bioschemas.org/profiles/DataCatalog/0.3-RELEASE-2019_07_01/',
-      'name' => 'Sysmo SEEK',
+      'name' => 'SciLifeLab Digital Research Hub',
       'url' => 'http://fairyhub.org',
       'dataset' => [
         { '@type' => 'Dataset', '@id' => 'http://fairyhub.org/institutions', 'name' => 'Institutions' },
@@ -81,9 +81,9 @@ class SchemaLdGenerationTest < ActiveSupport::TestCase
       'keywords' => 'a, b, c, d',
       'provider' => {
         '@type' => 'Organization',
-        'name' => 'SysMO-DB',
-        'url' => 'http://www.sysmo-db.org',
-        '@id' => 'http://www.sysmo-db.org'
+        'name' => 'SciLifeLab Data Centre',
+        'url' => 'https://www.scilifelab.se/data/',
+        '@id' => 'https://www.scilifelab.se/data/'
       },
       'dateCreated' => @current_time.iso8601,
       'dateModified' => @current_time.iso8601
@@ -854,15 +854,15 @@ class SchemaLdGenerationTest < ActiveSupport::TestCase
       '@type' => 'Dataset',
       'dct:conformsTo' => 'https://bioschemas.org/profiles/Dataset/0.3-RELEASE-2019_06_14/',
       '@id' => 'http://localhost:3000/workflows',
-      'description' => 'Workflows in Sysmo SEEK.',
+      'description' => 'Workflows in SciLifeLab Digital Research Hub.',
       'name' => 'Workflows',
       'url' => 'http://localhost:3000/workflows',
       'keywords' => [],
       'license' => 'https://spdx.org/licenses/CC0-1.0',
       'creator' => [{'@type' => 'Organization',
-                     '@id' => 'http://www.sysmo-db.org',
-                     'name' => 'SysMO-DB',
-                     'url' => 'http://www.sysmo-db.org'}],
+                     '@id' => 'https://www.scilifelab.se/data/',
+                     'name' => 'SciLifeLab Data Centre',
+                     'url' => 'https://www.scilifelab.se/data/'}],
       'includedInDataCatalog' => {'@id' => 'http://localhost:3000'}
     }
 
@@ -888,21 +888,21 @@ class SchemaLdGenerationTest < ActiveSupport::TestCase
       '@type' => 'Dataset',
       'dct:conformsTo' => 'https://bioschemas.org/profiles/Dataset/0.3-RELEASE-2019_06_14/',
       '@id' => 'http://localhost:3000/workflows',
-      'description' => 'Workflows in Sysmo SEEK.',
+      'description' => 'Workflows in SciLifeLab Digital Research Hub.',
       'name' => 'Workflows',
       'url' => 'http://localhost:3000/workflows',
       'keywords' => [],
       'license' => 'https://spdx.org/licenses/CC-BY-4.0',
       'creator' => [{ '@type' => 'Organization',
-                      '@id' => 'http://www.sysmo-db.org',
-                      'name' => 'SysMO-DB',
-                      'url' => 'http://www.sysmo-db.org' }],
+                      '@id' => 'https://www.scilifelab.se/data/',
+                      'name' => 'SciLifeLab Data Centre',
+                      'url' => 'https://www.scilifelab.se/data/' }],
       'distribution' => { '@type' => 'DataDownload',
                           'contentSize' => size,
                           'contentUrl' => 'http://localhost:3000/workflows.jsonld?dump=true',
                           'encodingFormat' => 'application/ld+json',
                           'name' => 'workflows-bioschemas-dump.jsonld',
-                          'description' => 'A collection of public Workflows in Sysmo SEEK, serialized as an array of JSON-LD objects conforming to Bioschemas profiles.',
+                          'description' => 'A collection of public Workflows in SciLifeLab Digital Research Hub, serialized as an array of JSON-LD objects conforming to Bioschemas profiles.',
                           'dateModified' => @current_time.iso8601 },
       'includedInDataCatalog' => { '@id' => 'http://localhost:3000' }
     }
