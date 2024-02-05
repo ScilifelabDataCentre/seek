@@ -697,25 +697,27 @@ class SampleTypesControllerTest < ActionController::TestCase
   end
 
   test 'display sample type with related templates' do
-    person = FactoryBot.create(:person)
+    with_config_value(:isa_json_compliance_enabled, false) do
+      person = FactoryBot.create(:person)
 
-    template = FactoryBot.create(:min_template, contributor: person, title:'related template')
-    template2 = FactoryBot.create(:min_template, contributor: person, title:'unrelated template')
+      template = FactoryBot.create(:min_template, contributor: person, title:'related template')
+      template2 = FactoryBot.create(:min_template, contributor: person, title:'unrelated template')
 
-    # must be associated with a spreadsheet template
-    sample_type = FactoryBot.create(:strain_sample_type, isa_template: template, contributor: person)
+      # must be associated with a spreadsheet template
+      sample_type = FactoryBot.create(:strain_sample_type, isa_template: template, contributor: person)
 
-    assert_equal template, sample_type.isa_template
-    refute_nil sample_type.template
+      assert_equal template, sample_type.isa_template
+      refute_nil sample_type.template
 
-    login_as(person.user)
+      login_as(person.user)
 
-    get :show, params: { id: sample_type.id }
-    assert_response :success
+      get :show, params: { id: sample_type.id }
+      assert_response :success
 
-    assert_select 'div.related-items div#templates' do
-      assert_select 'a[href=?]', template_path(template), text: template.title
-      assert_select 'a[href=?]', template_path(template2), text: template2.title, count: 0
+      assert_select 'div.related-items div#templates' do
+        assert_select 'a[href=?]', template_path(template), text: template.title
+        assert_select 'a[href=?]', template_path(template2), text: template2.title, count: 0
+      end
     end
   end
 
@@ -723,11 +725,12 @@ class SampleTypesControllerTest < ActionController::TestCase
     project = FactoryBot.create(:project)
     FactoryBot.create(:simple_sample_type, template_id: 1, projects: [project])
     params = { projects: [project.id]}
+    # DRH configuration enables isa_json_compliance_enabled by default
     get :filter_for_select, params: params
-    assert_equal assigns(:sample_types).length, 1
-    with_config_value(:isa_json_compliance_enabled, true) do
+    assert_equal assigns(:sample_types).length, 0
+    with_config_value(:isa_json_compliance_enabled, false) do
       get :filter_for_select, params: params
-      assert_equal assigns(:sample_types).length, 0
+      assert_equal assigns(:sample_types).length, 1
     end
   end
 
